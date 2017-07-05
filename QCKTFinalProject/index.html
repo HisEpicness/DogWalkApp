@@ -1,0 +1,449 @@
+<!--
+    QCKTFinalProject
+    This project allows people to schedule dog walkers to walk their dogs
+    Revision History:
+        Quinlain Crawford 2017-04-07: Created
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>AvengersDB with Database CRUD</title>
+        <!--jQuery-->
+        <script src="js/lib/jquery-2.1.4.js"></script>
+        <!--jQuery mobile-->
+        <script src="js/lib/jquery.mobile-1.4.5.js"></script>
+        <!--jQuery validation-->
+        <script src="js/lib/jquery.validate.js"></script>
+        <!--jQuery mobile style-->
+        <link rel="stylesheet" type="text/css" href="css/lib/jquery.mobile-1.4.5.css">
+
+        <!--Our stuff-->
+        <script src="js/QCdatabase.js"></script>
+        <script src="js/KTdatabase.js"></script>
+
+        <script src="js/KTfeedbackDAL.js"></script>
+        <script src="js/KTfacade.js"></script>
+        <script src="js/KTutil.js"></script>
+        <script src="js/KTglobal.js"></script>
+
+        <script src="js/QCfinalDAL.js"></script>
+        <script src="js/QCfacade.js"></script>
+        <script src="js/QCutil.js"></script>
+        <script src="js/QCglobal.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+
+
+    </head>
+    <body>
+        <!--Login page-->
+        <div id="pageLogin" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Login</h1>
+
+
+            </header>
+            <section data-role="content">
+                <form id="loginForm">
+                    <label for="txtLoginUsername">Username:</label>
+                    <input type="text" name="txtLoginUsername" id="txtLoginUsername">
+
+                    <!--changed to type password-->
+                    <label for="txtLoginPassword">Password:</label>
+                    <input type="password" name="txtLoginPassword" id="txtLoginPassword">
+
+
+                    <!--remove href-->
+                    <!--<a data-role="button" href="#pageViewAccount" name="btnLogin" id="btnLogin">Login</a>-->
+                    <a data-role="button" name="btnLogin" id="btnLogin">Login</a>
+                </form>
+
+                <a data-role="button" href="#pageAddAccount" name="btnCreateAccount" id="btnCreateAccount">Create Account</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--View Account page-->
+        <div id="pageViewAccount" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>My Account</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home" class="ui-btn-active ui-state-persist">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+
+            </header>
+            <section data-role="content">
+                <!--<label id="lblUsername">Username:</label>-->
+                <!--<label id="lblFirstName">First Name:</label>-->
+                <!--<label id="lblLastName">Last Name:</label>-->
+                <!--<label id="lblEmail">Email:</label>-->
+
+                <!--put this here-->
+                <ul id="lvAccountInfo" data-role="listview"></ul>
+
+
+
+                <a data-role="button" href="#pageAddDog" id="btnAddDog" name="btnAddDog">Add Dog</a>
+                <a data-role="button" href="#pageEditAccount" id="btnEditAccount" name="btnEditAccount">Edit Account</a>
+                <a data-role="button" href="#pageViewSchedule" id="btnViewSchedule" name="btnViewSchedule">View Schedule</a>
+                <a data-role="button" href="#pageLogin" id="btnLogout" name="btnLogout">Logout</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Add Account page-->
+        <div id="pageAddAccount" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Add Account</h1>
+
+
+
+            </header>
+            <section data-role="content">
+                <form id="addAccountForm">
+                    <label for="txtAddUsername">Username:</label>
+                    <input type="text" name="txtAddUsername" id="txtAddUsername">
+                    <label for="txtAddPassword">Password:</label>
+                    <input type="password" name="txtAddPassword" id="txtAddPassword">
+                    <label for="txtConfirmPassword">Confirm Password:</label>
+                    <input type="password" name="txtConfirmPassword" id="txtConfirmPassword">
+                    <label for="txtAddFirstName">First Name:</label>
+                    <input type="text" name="txtAddFirstName" id="txtAddFirstName">
+                    <label for="txtAddLastName">Last Name:</label>
+                    <input type="text" name="txtAddLastName" id="txtAddLastName">
+                    <label for="txtAddEmail">Email:</label>
+                    <input type="text" name="txtAddEmail" id="txtAddEmail">
+                    <label for="chkAddWalker">Are you a dog walker?:</label>
+                    <input type="checkbox" name="chkAddWalker" id="chkAddWalker">
+
+
+                    <a data-role="button" name="btnAddAccount" id="btnAddAccount">Add Account</a>
+                </form>
+                <a data-role="button" href="#pageLogin" name="btnCancel1" id="btnCancel1">Cancel</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Add Dog-->
+        <div id="pageAddDog" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Add Dog</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+
+            </header>
+            <section data-role="content">
+                <form id="addDogForm">
+                    <label for="txtAddDogName">Name:</label>
+                    <input type="text" name="txtAddDogName" id="txtAddDogName">
+                    <label for="txtAddDogAge">Age:</label>
+                    <input type="text" name="txtAddDogAge" id="txtAddDogAge">
+                    <label for="txtAddDogBreed">Breed:</label>
+                    <input type="text" name="txtAddDogBreed" id="txtAddDogBreed">
+                    <label>Gender:</label>
+                    <label for="radMale">Male</label>
+                    <input type="radio" name="radDogGender" id="radMale">
+                    <label for="radFemale">Female</label>
+                    <input type="radio" name="radDogGender" id="radFemale">
+
+                    <button name="btnCreateDog" id="btnCreateDog">Add Dog</button>
+                </form>
+                <a data-role="button" href="#pageViewAccount" name="btnCancel2" id="btnCancel2">Return</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--View Dog-->
+        <div id="pageViewDog" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>View Dog</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid" class="ui-btn-active ui-state-persist">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+            </header>
+            <section data-role="content">
+                <ul data-role="listview" id="dogList" name="dogList"></ul>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Schedule Walk-->
+        <div id="pageScheduleWalk" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Schedule Walk</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus" class="ui-btn-active ui-state-persist">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+
+            </header>
+            <section data-role="content">
+            <form id="scheduleForm">
+                <label for="selWalker">Walker:</label>
+                <select name="selWalker" id="selWalker">
+                    <!--Grab options from database-->
+                </select>
+                <label for="selDog">Dog:</label>
+                <select name="selDog" id="selDog">
+                    <!--Grab options from database-->
+                </select>
+                <label for="datDate">Date:</label>
+
+
+                <!--added date-->
+                <input type="date" name="datDate" id="datDate">
+                <label for="datPickupTime">Pickup Time:</label>
+
+
+                <input type="time" name="datPickupTime" id="datPickupTime">
+                <label for="selLength">Length of walk:</label>
+                <select name="selLength" id="selLength">
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                </select>
+
+                <button name="btnCreateAppointment" id="btnCreateAppointment">Create Appointment</button>
+            </form>
+
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--View Schedule-->
+        <div id="pageViewSchedule" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>View Schedule</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+            </header>
+            <section data-role="content">
+
+
+                <!--Put JQuery Listview here-->
+                <ul id="lvViewAppointments" data-role="listview"></ul>
+
+
+                <a data-role="button" href="#pageViewAccount" name="btnCancel6" id="btnCancel6">Return</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Edit Dog-->
+        <div id="pageEditDog" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Edit Dog</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+            </header>
+            <section data-role="content">
+                <form id="editDogForm">
+                    <label for="txtEditDogName">Name:</label>
+                    <input type="text" name="txtEditDogName" id="txtEditDogName">
+                    <label for="txtEditDogAge">Age:</label>
+                    <input type="text" name="txtEditDogAge" id="txtEditDogAge">
+                    <label for="txtEditDogBreed">Breed:</label>
+                    <input type="text" name="txtEditDogBreed" id="txtEditDogBreed">
+                    <label>Gender:</label>
+                    <label for="radEditMale">Male</label>
+                    <input type="radio" name="radEditDogGender" id="radEditMale">
+                    <label for="radEditFemale">Female</label>
+                    <input type="radio" name="radEditDogGender" id="radEditFemale">
+
+                    <button name="btnEditDog" id="btnEditDog">Edit Dog</button>
+                    <button name="btnDeleteDog" id="btnDeleteDog">Delete Dog</button>
+                </form>
+                <a data-role="button" href="#pageViewDog" name="btnCancel3" id="btnCancel3">Return</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Edit Account-->
+        <div id="pageEditAccount" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Edit Account</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+            </header>
+            <section data-role="content">
+                <form id="editAccountForm">
+                    <label for="txtEditUsername">Username:</label>
+                    <input type="text" name="txtEditUsername" id="txtEditUsername">
+                    <label for="txtEditPassword">Password:</label>
+                    <input type="password" name="txtEditPassword" id="txtEditPassword">
+                    <label for="txtConfirmEditPassword">Confirm Password:</label>
+                    <input type="password" name="txtConfirmEditPassword" id="txtConfirmEditPassword">
+                    <label for="txtEditFirstName">First Name:</label>
+                    <input type="text" name="txtEditFirstName" id="txtEditFirstName">
+                    <label for="txtEditLastName">Last Name:</label>
+                    <input type="text" name="txtEditLastName" id="txtEditLastName">
+                    <label for="txtEditEmail">Email:</label>
+                    <input type="text" name="txtEditEmail" id="txtEditEmail">
+                    <label for="chkEditWalker">Are you a dog walker?:</label>
+                    <input type="checkbox" name="chkEditWalker" id="chkEditWalker">
+
+
+                    <a data-role="button" href="#pageViewAccount" name="btnUpdateAccount" id="btnUpdateAccount">Update Account</a>
+                </form>
+                <a data-role="button" href="#pageViewAccount" name="btnCancel4" id="btnCancel4">Cancel</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--Edit Schedule-->
+        <div id="pageEditSchedule" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>Edit Schedule</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+            </header>
+            <section data-role="content">
+                <form>
+                <label for="selEditWalker">Walker:</label>
+                <select name="selEditWalker" id="selEditWalker">
+                    <!--Grab options from database-->
+                </select>
+                <label for="selEditDog">Dog:</label>
+                <select name="selEditDog" id="selEditDog">
+                    <!--Grab options from database-->
+                </select>
+
+
+                    <!--added date-->
+                    <label for="datDate">Pickup Time:</label>
+                    <input type="time" name="datEditDate" id="datEditDate">
+
+
+                <label for="datEditPickupTime">Pickup Time:</label>
+                <input type="time" name="datEditPickupTime" id="datEditPickupTime">
+                <label for="selLength">Length of walk:</label>
+                <select name="selEditLength" id="selEditLength">
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                </select>
+
+                    <a data-role="button" href="#pageViewSchedule" name="btnUpdateSchedule" id="btnUpdateSchedule">Update Appointment</a>
+
+                    <!--add delete button-->
+                    <a data-role="button" name="btnDeleteSchedule" id="btnDeleteSchedule">Delete Appointment</a>
+
+                </form>
+                <a data-role="button" href="#pageViewSchedule" name="btnCancel5" id="btnCancel5">Cancel</a>
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+        <!--About-->
+        <div id="pageAbout" data-role="page">
+            <header data-role="header" data-theme="b" data-position="fixed">
+                <h1>About</h1>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li><a href="#pageViewAccount" data-icon="home">View Account</a></li>
+                        <li><a href="#pageViewDog" data-icon="grid">View Dog</a></li>
+                        <li><a href="#pageScheduleWalk" data-icon="plus">Schedule Walk</a></li>
+                        <li><a href="#pageAbout" data-icon="star"  class="ui-btn-active ui-state-persist">Contact us</a></li>
+                    </ul>
+                </div>
+
+
+            </header>
+            <section data-role="content">
+
+                <p>Quinlain Crawford, Qcrawford0062@conestogac.on.ca</p>
+                <p>Kyle Thiel, Kthiel3170@conestogac.on.ca</p>
+
+
+            </section>
+            <footer data-role="footer" data-theme="b" data-position="fixed">
+                <h1>&copy; Quinlain Crawford, Kyle Thiel</h1>
+            </footer>
+        </div>
+
+    </body>
+</html>
